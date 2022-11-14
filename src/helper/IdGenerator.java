@@ -1,3 +1,5 @@
+package helper;
+
 public class IdGenerator {
 
     // length 3 =>  id: 5  -> 005

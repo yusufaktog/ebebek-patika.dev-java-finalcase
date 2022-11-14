@@ -27,11 +27,8 @@ public enum Ram {
 
     GB64("64GB"),
 
-    GB128("128GB"),
-
-    NONE("None");
-
-
+    GB128("128GB")
+    ;
     private final String ram;
 
     Ram(String ram) {

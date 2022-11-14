@@ -1,3 +1,5 @@
+package entity;
+
 import enums.Ram;
 import enums.Screen;
 import enums.Storage;

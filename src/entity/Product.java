@@ -1,5 +1,9 @@
+package entity;
+
 import enums.Ram;
 import enums.Screen;
+import entity.Brand;
+import helper.IdGenerator;
 
 public abstract class Product {
     private static int objectCounter = 0;
@@ -71,7 +75,7 @@ public abstract class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "entity.Product{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", discount=" + discount +

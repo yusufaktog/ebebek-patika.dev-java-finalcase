@@ -1,7 +1,11 @@
+package entity;
+
+import helper.IdGenerator;
+
 public class Brand {
-    private static int objectCounter = 0;
-    private final String id;
-    private final String name;
+     static int objectCounter = 0;
+     final String id;
+     final String name;
 
     public Brand(String name) {
         this.id = IdGenerator.generate(++objectCounter);
@@ -18,7 +22,7 @@ public class Brand {
 
     @Override
     public String toString() {
-        return "Brand{" +
+        return "product.Brand{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 '}';
