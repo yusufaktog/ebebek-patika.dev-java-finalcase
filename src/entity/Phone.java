@@ -1,11 +1,12 @@
 package entity;
 
+import enums.Color;
 import enums.Ram;
 import enums.Screen;
 import enums.Storage;
 
 public class Phone extends Product {
-    private final String color;
+    private final Color color;
     private final int battery;
     private final Storage storage;
 
@@ -16,17 +17,18 @@ public class Phone extends Product {
                  Brand brand,
                  Ram ram,
                  Screen screenSize,
-                 String color,
+                 enums.Color color,
                  int battery,
                  Storage storage
     ) {
+
         super(name, discount, stock, price, brand, ram, screenSize);
         this.color = color;
         this.battery = battery;
         this.storage = storage;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return color;
     }
 

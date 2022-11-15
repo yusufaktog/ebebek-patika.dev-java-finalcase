@@ -1,6 +1,12 @@
 package enums;
 
 public enum Storage {
+    GB16("16GB"),
+
+    GB32("32GB"),
+
+    GB64("64GB"),
+
     GB128("128GB"),
 
     GB240("240GB"),

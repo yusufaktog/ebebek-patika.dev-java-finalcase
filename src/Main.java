@@ -1,16 +1,17 @@
 import entity.Brand;
 import entity.Notebook;
+import entity.Phone;
+import enums.Color;
 import enums.Ram;
 import enums.Screen;
 import enums.Storage;
+import exception.EntityNotFoundException;
 import service.BrandService;
 import service.NotebookService;
 import service.PhoneService;
 
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
     private final BrandService brandService;
@@ -29,23 +30,89 @@ public class Main {
         return scanner.nextLine();
     }
 
-    public String showNotebookPanel() {
-        showPanelOptions("Notebook");
-        return getInput();
-    }
-
-    public String showPhonePanel() {
-        showPanelOptions("Phone");
-        return getInput();
-    }
-
-    public void showPanelOptions(String panelName) {
+    public String showPanelOptions(String panelName) {
         System.out.println("===================================");
         System.out.println("Welcome To The " + panelName + " Panel");
         System.out.println("===================================");
-        System.out.printf("1) Add %s \n2) Get %s By Id \n3) Show %s List \n4) Delete %s By Id \n5) Filter By Brand\n" +
-                        "0) MAIN MENU\n",
+        System.out.printf("""
+                        1) Add %s\s
+                        2) Get %s By Id\s
+                        3) Show %s List\s
+                        4) Delete %s By Id\s
+                        5) Filter By Brand
+                        0) MAIN MENU
+                        """,
                 panelName, panelName, panelName, panelName);
+        return getInput();
+    }
+
+    public boolean handlePhoneOperations(String option) {
+        Scanner scanner = new Scanner(System.in);
+        switch (option) {
+            case "1":
+                System.out.println("!! Type all the input separated with commas !!");
+                System.out.println("Fields  => Name,    Discount, stock, price, brand name, ram, screen size, color," +
+                        "battery, storage");
+                System.out.println("Example => Note 10, 5,        1000,  3500,  Xiaomi,     4GB , 6.3,        Black," +
+                        "3200,  64GB ");
+                // get rid of whitespaces
+                String[] input = scanner.nextLine().split(",");
+                input = Arrays.stream(input).map(String::trim).toArray(String[]::new);
+
+                if (input.length <= 1) {
+                    System.out.println("Your input does not contain ',' please separate your input with ',' ");
+                    break;
+                }
+
+                if (input.length != 10) {
+                    System.out.println("Input Miss match, required 10 inputs got " + input.length);
+                    break;
+                }
+
+                try {
+
+                    this.phoneService.addPhone(new Phone(
+                            input[0],
+                            Double.parseDouble(input[1]),
+                            Integer.parseInt(input[2]),
+                            Double.parseDouble(input[3]),
+                            brandService.getBrandByName(input[4]),
+                            convertToEnumType(input[5], Ram.class.getSimpleName(), Ram.values()),
+                            convertToEnumType(input[6], Screen.class.getSimpleName(), Screen.values()),
+                            convertToEnumType(input[7], Color.class.getSimpleName(), Color.values()),
+                            Integer.parseInt(input[8]),
+                            convertToEnumType(input[9], Storage.class.getSimpleName(), Storage.values()))
+
+                    );
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input...");
+                } catch (EntityNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
+            case "2":
+                System.out.print("Phone ID:");
+                this.phoneService.printPhones(List.of(this.phoneService.getPhoneById(scanner.nextLine())));
+                break;
+            case "3":
+                this.phoneService.printPhones(this.phoneService.listAllPhones());
+                break;
+            case "4":
+                System.out.print("Phone ID:");
+                this.phoneService.deletePhoneById(scanner.nextLine());
+                break;
+            case "5":
+                System.out.print("Brand Name:");
+                this.phoneService.printFilteredPhones(scanner.nextLine());
+                break;
+            case "0":
+                return false;
+            default:
+                System.out.println("Invalid Option");
+                break;
+        }
+        return true;
+
     }
 
     public boolean handleNotebookOperations(String option) {
@@ -53,10 +120,12 @@ public class Main {
         switch (option) {
             case "1":
                 System.out.println("!! Type all the input separated with commas !!");
-                System.out.println("Fields => Name,     Discount, stock,  price,  brand name, ram,  screen size, hdd, ssd");
+                System.out.println("Fields  => Name,     Discount, stock,  price,  brand name, ram,  screen size," +
+                        " hdd, ssd");
                 System.out.println("Example => Abra A5,  15,       1 000,  10000,  Monster,    8GB,    15.6, " +
                         "1(TB || GB || None),  256(TB || GB || None)");
 
+                // get rid of whitespaces
                 String[] input = scanner.nextLine().split(",");
                 input = Arrays.stream(input).map(String::trim).toArray(String[]::new);
 
@@ -65,20 +134,28 @@ public class Main {
                     break;
                 }
                 if (input.length != 9) {
-                    System.out.println("Input Miss match, required 8 inputs got " + input.length);
+                    System.out.println("Input Miss match, required 9 inputs got " + input.length);
                     break;
                 }
-                this.notebookService.addNotebook(new Notebook(
-                        input[0],
-                        Double.parseDouble(input[1]),
-                        Integer.parseInt(input[2]),
-                        Double.parseDouble(input[3]),
-                        brandService.getBrandByName(input[4]),
-                        handleRam(input[5]),
-                        handleScreen(input[6]),
-                        handleHdd(input[7]),
-                        handleSsd(input[8])
-                ));
+
+                try {
+                    this.notebookService.addNotebook(new Notebook(
+                            input[0],
+                            Double.parseDouble(input[1]),
+                            Integer.parseInt(input[2]),
+                            Double.parseDouble(input[3]),
+                            brandService.getBrandByName(input[4]),
+                            convertToEnumType(input[5], Ram.class.getSimpleName(), Ram.values()),
+                            convertToEnumType(input[6], Screen.class.getSimpleName(), Screen.values()),
+                            convertToEnumType(input[7], Storage.class.getSimpleName(), Storage.values()),
+                            convertToEnumType(input[8], Storage.class.getSimpleName(), Storage.values())
+
+                    ));
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input...");
+                } catch (EntityNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
             case "2":
                 System.out.print("Notebook ID:");
@@ -96,32 +173,12 @@ public class Main {
                 this.notebookService.printFilteredNotebooks(scanner.nextLine());
                 break;
             case "0":
-                return false;
+                return true;
             default:
                 System.out.println("Invalid Option");
                 break;
         }
-        return true;
-    }
-
-    /*    Asus X415ma Celeron, 0,500,5799,Asus,4GB,15.6,128GB,None
-        Abra A5, 10, 1000, 10000, Monster, 16GB, 15.6, 1TB, 256GB*/
-    private Storage handleSsd(String s) {
-        return Arrays.stream(Storage.values()).filter(screen -> screen.toString().equalsIgnoreCase(s)).toList().get(0);
-
-    }
-
-    private Storage handleHdd(String s) {
-        return Arrays.stream(Storage.values()).filter(screen -> screen.toString().equalsIgnoreCase(s)).toList().get(0);
-
-    }
-
-    private Screen handleScreen(String s) {
-        return Arrays.stream(Screen.values()).filter(screen -> screen.toString().equalsIgnoreCase(s)).toList().get(0);
-    }
-
-    private Ram handleRam(String s) {
-        return Arrays.stream(Ram.values()).filter(ram -> ram.toString().equalsIgnoreCase(s)).toList().get(0);
+        return false;
     }
 
     static final String options = "1) Notebook Panel\n2) Phone Panel \n3) Show Brands \n0) Exit";
@@ -139,40 +196,26 @@ public class Main {
         main.brandService.addBrand(new Brand("Xiaomi"));
         main.brandService.addBrand(new Brand("Monster"));
 
-
-        main.notebookService.addNotebook(new Notebook("Abra A5", 10.0, 1000, 14500.0,
-                main.brandService.getBrandById("0000000008"), Ram.GB8, Screen.
-                PC_MEDIUM, Storage.TB1, Storage.GB256));
-        main.notebookService.addNotebook(new Notebook("Tulpar A5", 10.0, 1000, 14500.0,
-                main.brandService.getBrandById("0000000007"), Ram.GB8, Screen.
-                PC_MEDIUM, Storage.TB1, Storage.GB256));
-        main.notebookService.addNotebook(new Notebook("Xsbith A5", 10.0, 1000, 14500.0,
-                main.brandService.getBrandById("0000000006"), Ram.GB8, Screen.
-                PC_MEDIUM, Storage.TB1, Storage.GB256));
-        main.notebookService.addNotebook(new Notebook("Excalibur A5", 10.0, 1000, 14500.0,
-                main.brandService.getBrandById("0000000005"), Ram.GB8, Screen.
-                PC_MEDIUM, Storage.TB1, Storage.GB256));
-        main.notebookService.addNotebook(new Notebook("Celeron A5", 10.0, 1000, 14500.0,
-                main.brandService.getBrandById("0000000005"), Ram.GB8, Screen.
-                PC_MEDIUM, Storage.TB1, Storage.GB256));
-
         while (true) {
             System.out.println("---------");
             System.out.println("MAIN MENU");
             System.out.println("---------");
             System.out.println(options);
 
-
             switch (main.getInput()) {
                 case "1":
                     while (true) {
-                        String option = main.showNotebookPanel();
-                        if (!main.handleNotebookOperations(option))
+                        String option = main.showPanelOptions("Notebook");
+                        if (main.handleNotebookOperations(option))
                             break;
                     }
                     break;
                 case "2":
-                    main.showPhonePanel();
+                    while (true) {
+                        String option = main.showPanelOptions("Phone");
+                        if (main.handlePhoneOperations(option))
+                            break;
+                    }
                     break;
                 case "3":
                     main.brandService.printBrands();
@@ -185,25 +228,22 @@ public class Main {
             }
         }
 
-
-/*
-
-
-        main.notebookService.addPhone(new Notebook.Phone("Note 10", 10, 250, 3500.0,
-                main.brandService.getBrandById("0000000006"), Ram.GB4, Screen.PHONE_MEDIUM,
-                "Black", 4000, Storage.GB256));
-        main.notebookService.addPhone(new Notebook.Phone("Note 10", 10, 250, 3500.0,
-                main.brandService.getBrandById("0000000006"), Ram.GB4, Screen.PHONE_MEDIUM,
-                "Black", 4000, Storage.GB256));
-        main.notebookService.addPhone(new Notebook.Phone("Note 10", 10, 250, 3500.0,
-                main.brandService.getBrandById("0000000006"), Ram.GB4, Screen.PHONE_MEDIUM,
-                "Black", 4000, Storage.GB256));
-        main.notebookService.addPhone(new Notebook.Phone("Note 10", 10, 250, 3500.0,
-                main.brandService.getBrandById("0000000006"), Ram.GB4, Screen.PHONE_MEDIUM,
-                "Black", 4000, Storage.GB256));
-
-//        main.notebookService.printPhones();
-
-        main.notebookService.printNotebooks();*/
     }
+
+    private <T> T convertToEnumType(String value, String enumName, T[] values) {
+        if (enumTypeExist(values, value)) {
+            return Arrays.stream(values)
+                    .filter(ram -> ram.toString().equalsIgnoreCase(value))
+                    .toList().get(0);
+        } else {
+            throw new EntityNotFoundException("We do not have any products with this feature in our store yet. " +
+                    enumName + ": " + value +
+                    "\nIn this category, we only have the following options:\n" + Arrays.toString(values));
+        }
+    }
+
+    private boolean enumTypeExist(Object[] list, String value) {
+        return Arrays.stream(list).anyMatch(o -> o.toString().equalsIgnoreCase(value));
+    }
+
 }

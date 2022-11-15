@@ -21,13 +21,13 @@ public class PhoneService {
 
     public void addPhone(Phone phone) {
         phones.put(phone.getId(), phone);
-        System.out.println("Phone ID: " + phone.getId() + " has been deleted");
+        System.out.println("Phone ID: " + phone.getId() + " has been created");
 
     }
 
     public void deletePhoneById(String phoneId) {
-        phones.remove(phoneId);
-        System.out.println("Phone ID: " + phoneId + " has been deleted");
+        var result = phones.remove(phoneId);
+        System.out.println(result != null ? "Phone ID: " + phoneId + " has been deleted" : " Product Not Found...");
     }
 
     public void updatePhone(String phoneId, Phone phone) {
@@ -43,8 +43,11 @@ public class PhoneService {
                 collect(Collectors.toList());
     }
 
-    public void printPhones() {
-
+    public void printPhones(List<Phone> phones) {
+        if (phones.isEmpty()) {
+            System.out.println("There are no products in the list yet...");
+            return;
+        }
         System.out.println("-----------------------------------------------------------------------------------------" +
                 "--------------------------------------------------------------------------");
         System.out.printf("%15s %15s %15s %15s %15s %15s %15s %15s %15s %15s", "PHONE ID", "NAME", "PRICE", "DISCOUNT",
@@ -52,7 +55,7 @@ public class PhoneService {
         System.out.println();
         System.out.println("-----------------------------------------------------------------------------------------" +
                 "-------------------------------------------------------------------------");
-        listAllPhones().forEach(phone -> {
+        phones.forEach(phone -> {
 
             System.out.printf("%15s %15s %15s %15s %15s %15s %15s %15s %15s %15s", phone.getId(), phone.getName(),
                     phone.getPrice(), phone.getDiscount(), phone.getBrand().getName(), phone.getStorage().toString(),
@@ -60,5 +63,9 @@ public class PhoneService {
             System.out.println();
 
         });
+    }
+
+    public void printFilteredPhones(String filter) {
+        printPhones(filterPhonesByBrandName(filter));
     }
 }

@@ -25,8 +25,8 @@ public class NotebookService {
     }
 
     public void deleteNotebookById(String notebookId) {
-        notebooks.remove(notebookId);
-        System.out.println("Notebook ID: " + notebookId + " has been deleted");
+        var result = notebooks.remove(notebookId);
+        System.out.println(result != null ? "Notebook ID: " + notebookId + " has been deleted" : "Product Not Found");
     }
 
     public void updateNotebook(String notebookId, Notebook notebook) {
@@ -43,7 +43,10 @@ public class NotebookService {
     }
 
     public void printNotebooks(List<Notebook> notebooks) {
-
+        if (notebooks.isEmpty()) {
+            System.out.println("There are no products in the list yet...");
+            return;
+        }
         System.out.println("-----------------------------------------------------------------------------------------" +
                 "-------------------------------------------------------");
         System.out.printf("%15s %25s %15s %15s %15s %10s %10s %15s %10s", "Notebook ID", "NAME", "PRICE",
