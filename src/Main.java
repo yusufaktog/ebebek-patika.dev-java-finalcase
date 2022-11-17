@@ -1,32 +1,36 @@
 import entity.Brand;
 import entity.Notebook;
 import entity.Phone;
-import enums.Color;
-import enums.Ram;
-import enums.Screen;
-import enums.Storage;
+import enums.*;
 import exception.EntityNotFoundException;
 import service.BrandService;
-import service.NotebookService;
-import service.PhoneService;
+import service.ProductService;
 
 import java.util.*;
 import java.util.List;
 
+import static enums.EnumHandler.convertToEnumType;
+
 public class Main {
     private final BrandService brandService;
-    private final PhoneService phoneService;
-    private final NotebookService notebookService;
+    private final ProductService productService;
+    static final String options = """
+            1) Notebook Panel
+            2) Phone Panel\s
+            3) Show Brands\s
+            4) Get Product By Id\s
+            5) Delete Product By Id\s
+            6) Filter All Products By Brand Name\s
+            0) Exit""";
 
-    public Main(BrandService brandService, PhoneService phoneService, NotebookService notebookService) {
+    public Main(BrandService brandService, ProductService productService) {
         this.brandService = brandService;
-        this.phoneService = phoneService;
-        this.notebookService = notebookService;
+        this.productService = productService;
     }
 
-    public String getInput() {
+    public String getInput(String question) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Choose an option: ");
+        System.out.print(question);
         return scanner.nextLine();
     }
 
@@ -36,14 +40,12 @@ public class Main {
         System.out.println("===================================");
         System.out.printf("""
                         1) Add %s\s
-                        2) Get %s By Id\s
-                        3) Show %s List\s
-                        4) Delete %s By Id\s
-                        5) Filter By Brand
+                        2) Show %s List\s
+                        3) Filter By Brand\s
                         0) MAIN MENU
                         """,
-                panelName, panelName, panelName, panelName);
-        return getInput();
+                panelName, panelName);
+        return getInput("Choice: ");
     }
 
     public boolean handlePhoneOperations(String option) {
@@ -71,7 +73,7 @@ public class Main {
 
                 try {
 
-                    this.phoneService.addPhone(new Phone(
+                    this.productService.createProduct(new Phone(
                             input[0],
                             Double.parseDouble(input[1]),
                             Integer.parseInt(input[2]),
@@ -91,27 +93,24 @@ public class Main {
                 }
                 break;
             case "2":
-                System.out.print("Phone ID:");
-                this.phoneService.printPhones(List.of(this.phoneService.getPhoneById(scanner.nextLine())));
+                this.productService.printFilteredProducts(Category.PHONE);
                 break;
             case "3":
-                this.phoneService.printPhones(this.phoneService.listAllPhones());
-                break;
-            case "4":
-                System.out.print("Phone ID:");
-                this.phoneService.deletePhoneById(scanner.nextLine());
-                break;
-            case "5":
                 System.out.print("Brand Name:");
-                this.phoneService.printFilteredPhones(scanner.nextLine());
+                try {
+                    this.productService.printFilteredProducts(scanner.nextLine(), Category.PHONE);
+
+                } catch (EntityNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
             case "0":
-                return false;
+                return true;
             default:
                 System.out.println("Invalid Option");
                 break;
         }
-        return true;
+        return false;
 
     }
 
@@ -139,7 +138,7 @@ public class Main {
                 }
 
                 try {
-                    this.notebookService.addNotebook(new Notebook(
+                    this.productService.createProduct(new Notebook(
                             input[0],
                             Double.parseDouble(input[1]),
                             Integer.parseInt(input[2]),
@@ -158,20 +157,16 @@ public class Main {
                 }
                 break;
             case "2":
-                System.out.print("Notebook ID:");
-                this.notebookService.printNotebooks(List.of(this.notebookService.getNotebookById(scanner.nextLine())));
+                this.productService.printFilteredProducts(Category.NOTEBOOK);
                 break;
             case "3":
-                this.notebookService.printNotebooks(this.notebookService.listAllNotebooks());
-                break;
-            case "4":
-                System.out.print("Notebook ID:");
-                this.notebookService.deleteNotebookById(scanner.nextLine());
-                break;
-            case "5":
                 System.out.print("Brand Name:");
-                this.notebookService.printFilteredNotebooks(scanner.nextLine());
-                break;
+                try {
+                    this.productService.printFilteredProducts(scanner.nextLine(), Category.NOTEBOOK);
+
+                } catch (EntityNotFoundException e) {
+                    System.out.println(e.getMessage());
+                }
             case "0":
                 return true;
             default:
@@ -181,11 +176,10 @@ public class Main {
         return false;
     }
 
-    static final String options = "1) Notebook Panel\n2) Phone Panel \n3) Show Brands \n0) Exit";
-
     public static void main(String[] args) {
-        Main main = new Main(new BrandService(), new PhoneService(), new NotebookService());
+        Main main = new Main(new BrandService(), new ProductService());
 
+        // manually create default brands
         main.brandService.addBrand(new Brand("Samsung"));
         main.brandService.addBrand(new Brand("Lenovo"));
         main.brandService.addBrand(new Brand("Apple"));
@@ -196,19 +190,53 @@ public class Main {
         main.brandService.addBrand(new Brand("Xiaomi"));
         main.brandService.addBrand(new Brand("Monster"));
 
+        main.productService.createProduct(new Notebook("Abra A5", 10.0, 1000, 14500.0,
+                main.brandService.getBrandById("B0000000009"), Ram.GB8, Screen.
+                PC_MEDIUM, Storage.TB1, Storage.GB256));
+        main.productService.createProduct(new Notebook("Tulpar A5", 10.0, 1000, 14500.0,
+                main.brandService.getBrandById("B0000000009"), Ram.GB8, Screen.
+                PC_MEDIUM, Storage.TB1, Storage.GB256));
+        main.productService.createProduct(new Notebook("Xsbith A5", 10.0, 1000, 14500.0,
+                main.brandService.getBrandById("B0000000006"), Ram.GB8, Screen.
+                PC_MEDIUM, Storage.TB1, Storage.GB256));
+        main.productService.createProduct(new Notebook("Excalibur A5", 10.0, 1000, 14500.0,
+                main.brandService.getBrandById("B0000000005"), Ram.GB8, Screen.
+                PC_MEDIUM, Storage.TB1, Storage.GB256));
+        main.productService.createProduct(new Notebook("Celeron A5", 10.0, 1000, 14500.0,
+                main.brandService.getBrandById("B0000000005"), Ram.GB8, Screen.
+                PC_MEDIUM, Storage.TB1, Storage.GB256));
+        main.productService.createProduct(new Phone("Note 8", 10, 250, 3500.0,
+                main.brandService.getBrandById("B0000000008"), Ram.GB4, Screen.PHONE_MEDIUM,
+                Color.BLACK, 4000, Storage.GB256));
+        main.productService.createProduct(new Phone("Note 10 Pro", 10, 250, 3500.0,
+                main.brandService.getBrandById("B0000000008"), Ram.GB4, Screen.PHONE_MEDIUM,
+                Color.GREEN, 4000, Storage.GB256));
+        main.productService.createProduct(new Phone("Note 10", 10, 250, 3500.0,
+                main.brandService.getBrandById("B0000000001"), Ram.GB4, Screen.PHONE_MEDIUM,
+                Color.BLUE, 4000, Storage.GB256));
+        main.productService.createProduct(new Phone("Note 21", 10, 250, 3500.0,
+                main.brandService.getBrandById("B0000000002"), Ram.GB4, Screen.PHONE_MEDIUM,
+                Color.YELLOW, 4000, Storage.GB256));
+        main.productService.createProduct(new Phone("Note 2", 10, 250, 3500.0,
+                main.brandService.getBrandById("B0000000004"), Ram.GB4, Screen.PHONE_MEDIUM,
+                Color.YELLOW, 4000, Storage.GB256));
+        main.productService.createProduct(new Phone("Note 1", 10, 250, 3500.0,
+                main.brandService.getBrandById("B0000000003"), Ram.GB4, Screen.PHONE_MEDIUM,
+                Color.YELLOW, 4000, Storage.GB256));
         while (true) {
             System.out.println("---------");
             System.out.println("MAIN MENU");
             System.out.println("---------");
             System.out.println(options);
 
-            switch (main.getInput()) {
+            switch (main.getInput("Choose an option: ")) {
                 case "1":
                     while (true) {
                         String option = main.showPanelOptions("Notebook");
                         if (main.handleNotebookOperations(option))
                             break;
                     }
+
                     break;
                 case "2":
                     while (true) {
@@ -216,12 +244,37 @@ public class Main {
                         if (main.handlePhoneOperations(option))
                             break;
                     }
+
                     break;
                 case "3":
                     main.brandService.printBrands();
                     break;
+
+                case "4":
+                    try {
+                        main.productService.printProduct(
+                                main.productService.getProductById(main.getInput("Product ID: ")));
+                    } catch (EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    break;
+                case "5":
+                    try {
+                        main.productService.deleteProductById(main.getInput("Product ID: "));
+
+                    } catch (EntityNotFoundException e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    break;
+                case "6":
+                    main.productService.printFilteredProducts(main.getInput("Brand: "), Category.NONE);
+
+                    break;
                 case "0":
                     return;
+
                 default:
                     System.out.println("Invalid Option");
                     break;
@@ -229,21 +282,4 @@ public class Main {
         }
 
     }
-
-    private <T> T convertToEnumType(String value, String enumName, T[] values) {
-        if (enumTypeExist(values, value)) {
-            return Arrays.stream(values)
-                    .filter(ram -> ram.toString().equalsIgnoreCase(value))
-                    .toList().get(0);
-        } else {
-            throw new EntityNotFoundException("We do not have any products with this feature in our store yet. " +
-                    enumName + ": " + value +
-                    "\nIn this category, we only have the following options:\n" + Arrays.toString(values));
-        }
-    }
-
-    private boolean enumTypeExist(Object[] list, String value) {
-        return Arrays.stream(list).anyMatch(o -> o.toString().equalsIgnoreCase(value));
-    }
-
 }

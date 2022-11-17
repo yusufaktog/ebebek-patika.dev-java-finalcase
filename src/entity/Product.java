@@ -2,11 +2,8 @@ package entity;
 
 import enums.Ram;
 import enums.Screen;
-import entity.Brand;
-import helper.IdGenerator;
 
 public abstract class Product {
-    private static int objectCounter = 0;
     private final String id;
     private final String name;
     private final double discount;
@@ -16,14 +13,15 @@ public abstract class Product {
     private final Ram ram;
     private final Screen screenSize;
 
-    public Product(String name,
+    public Product(String id,
+                   String name,
                    double discount,
                    int stock,
                    double price,
                    Brand brand,
                    Ram ram,
                    Screen screenSize) {
-        this.id = IdGenerator.generate(++objectCounter);
+        this.id = id;
         this.name = name;
         this.discount = discount;
         this.stock = stock;
@@ -69,21 +67,21 @@ public abstract class Product {
         return ram;
     }
 
-    public double getScreenSize() {
-        return Double.parseDouble(screenSize.toString());
+    public Screen getScreenSize() {
+        return screenSize;
     }
 
     @Override
     public String toString() {
-        return "entity.Product{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", discount=" + discount +
-                ", stock=" + stock +
-                ", price=" + price +
-                ", brand=" + brand +
-                ", ram=" + ram +
-                ", screenSize=" + screenSize +
+        return "Product {" +
+                "id = '" + id + '\'' +
+                ", name = '" + name + '\'' +
+                ", discount = " + discount +
+                ", stock = " + stock +
+                ", price = " + price +
+                ", brand = " + brand.getName() +
+                ", ram = " + ram +
+                ", screenSize = " + screenSize +
                 '}';
     }
 }

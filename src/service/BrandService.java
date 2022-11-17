@@ -1,5 +1,6 @@
 package service;
 
+import com.sun.tools.javac.Main;
 import entity.Brand;
 import exception.EntityNotFoundException;
 
@@ -47,6 +48,7 @@ public class BrandService {
             return;
         }
         System.out.println("=============================");
+        System.out.println("-----------------------------");
         System.out.println("ID \t\t\t|\tNAME\t\t ");
         System.out.println("-----------------------------");
         listAllBrands().forEach(brand -> {
@@ -57,14 +59,12 @@ public class BrandService {
     }
 
     public Brand getBrandByName(String brandName) {
-        final Brand[] brand = new Brand[1];
-        brands.forEach((s1, b) -> {
-            if (b.getName().equals(brandName))
-                brand[0] = b;
-        });
-        if (brand[0] == null) {
+
+        if (brands.values().stream().noneMatch(brand -> brand.getName().equalsIgnoreCase(brandName))) {
             throw new EntityNotFoundException("Brand: " + "'" + brandName + "'" + " Not Found!");
         }
-        return brand[0];
+
+        return brands.values().stream().filter(brand -> brand.getName().equalsIgnoreCase(brandName)).toList().get(0);
+
     }
 }

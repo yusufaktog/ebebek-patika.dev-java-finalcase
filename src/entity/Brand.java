@@ -3,12 +3,12 @@ package entity;
 import helper.IdGenerator;
 
 public class Brand {
-     static int objectCounter = 0;
-     final String id;
-     final String name;
+    static int objectCounter = 0;
+    final String id;
+    final String name;
 
     public Brand(String name) {
-        this.id = IdGenerator.generate(++objectCounter);
+        this.id = IdGenerator.generate(++objectCounter, Brand.class);
         this.name = name;
     }
 

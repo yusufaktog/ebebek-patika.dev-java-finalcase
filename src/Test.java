@@ -1,4 +1,36 @@
+import entity.Brand;
+import entity.Notebook;
+import entity.Phone;
+import entity.Product;
+import enums.Color;
+import enums.Ram;
+import enums.Screen;
+import enums.Storage;
+import service.BrandService;
+
+import java.util.HashMap;
+
 public class Test {
+    static HashMap<String, Object> products = new HashMap<>();
+
+    public static void main(String[] args) {
+        BrandService brandService = new BrandService();
+
+        brandService.addBrand(new Brand("Samsung"));
+        brandService.addBrand(new Brand("Lenovo"));
+        brandService.addBrand(new Brand("Apple"));
+
+        products.put("N0000000001", new Notebook("Abra A5", 10.0, 1000, 14500.0,
+                brandService.getBrandById("B0000000001"), Ram.GB8, Screen.
+                PC_MEDIUM, Storage.TB1, Storage.GB256));
+
+        products.put("P0000000002", new Phone("Note 1", 10, 250, 3500.0,
+                brandService.getBrandById("B0000000002"), Ram.GB4, Screen.PHONE_MEDIUM,
+                Color.YELLOW, 4000, Storage.GB256));
+//        ((Phone) products.get("000000001")).getColor();
+
+        System.out.println(products.get("P0000000002").toString());
+    }
      /*  public static void main(String[] args) {
               main.notebookService.addNotebook(new Notebook("Abra A5", 10.0, 1000, 14500.0,
                 main.brandService.getBrandById("0000000008"), Ram.GB8, Screen.

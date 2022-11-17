@@ -5,7 +5,7 @@ public class IdGenerator {
     // length 3 =>  id: 5  -> 005
     private static int length = 10;
 
-    public static String generate(int number) {
+    public static String generate(int number, Class<?> classToGenerate) {
 
         char fill = '0';
 
@@ -15,7 +15,8 @@ public class IdGenerator {
             length = toPad.length();
         }
 
-        return new String(new char[length - toPad.length()]).replace('\0', fill) + toPad;
+        return classToGenerate.getSimpleName().charAt(0) +
+                new String(new char[length - toPad.length()]).replace('\0', fill) + toPad;
     }
 
 }
