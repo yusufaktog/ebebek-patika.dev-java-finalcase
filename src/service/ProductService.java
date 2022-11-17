@@ -4,11 +4,11 @@ import entity.Notebook;
 import entity.Phone;
 import entity.Product;
 import enums.Category;
-import enums.EnumHandler;
 import exception.EntityNotFoundException;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ProductService implements Service {
 
@@ -143,7 +143,7 @@ public class ProductService implements Service {
 
             System.out.printf("%15s %25s %15s %15s %15s %10s %10s %15s %10s", notebook.getId(), notebook.getName(),
                     notebook.getPrice(), notebook.getDiscount(), notebook.getBrand().getName(),
-                    notebook.getHdd().toString(), notebook.getSsd().toString(), notebook.getScreenSize().toString(),
+                    notebook.getHdd().toString(), notebook.getSsd().toString(), notebook.getScreen().toString(),
                     notebook.getRam().toString());
             System.out.println();
 
@@ -154,14 +154,14 @@ public class ProductService implements Service {
 
         System.out.println("-----------------------------------------------------------------------------------------" +
                 "--------------------------------------------------------------------------");
-        System.out.printf("%15s %15s %15s %15s %15s %15s %15s %15s %15s %15s", "PHONE ID", "NAME", "PRICE", "DISCOUNT",
+        System.out.printf("%15s %25s %15s %15s %15s %15s %15s %10s %10s %10s", "PHONE ID", "NAME", "PRICE", "DISCOUNT",
                 "BRAND NAME", "STORAGE", "SCREEN SIZE", "BATTERY", "RAM", "COLOR");
         System.out.println();
         System.out.println("-----------------------------------------------------------------------------------------" +
                 "-------------------------------------------------------------------------");
         list.stream().map(o -> ((Phone) o)).forEach(phone -> {
 
-            System.out.printf("%15s %15s %15s %15s %15s %15s %15s %15s %15s %15s", phone.getId(), phone.getName(),
+            System.out.printf("%15s %25s %15s %15s %15s %15s %15s %10s %10s %10s", phone.getId(), phone.getName(),
                     phone.getPrice(), phone.getDiscount(), phone.getBrand().getName(), phone.getStorage().toString(),
                     phone.getScreenSize().toString(), phone.getBattery(), phone.getRam().toString(), phone.getColor());
             System.out.println();

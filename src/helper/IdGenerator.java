@@ -2,10 +2,10 @@ package helper;
 
 public class IdGenerator {
 
-    // length 3 =>  id: 5  -> 005
-    private static int length = 10;
+    // length: 3, Class: Phone =>  For 5th phone -> id = 'P005'
+    private static int length = 3;
 
-    public static String generate(int number, Class<?> classToGenerate) {
+    public static String generate(int number, Class<?> classToGenerateId) {
 
         char fill = '0';
 
@@ -15,8 +15,7 @@ public class IdGenerator {
             length = toPad.length();
         }
 
-        return classToGenerate.getSimpleName().charAt(0) +
+        return classToGenerateId.getSimpleName().charAt(0) +
                 new String(new char[length - toPad.length()]).replace('\0', fill) + toPad;
     }
-
 }

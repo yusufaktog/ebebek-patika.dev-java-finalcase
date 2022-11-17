@@ -9,6 +9,8 @@ public class Notebook extends Product {
     private static int counter = 0;
     private final Storage hdd;
     private final Storage ssd;
+    private final Ram ram;
+    private final Screen screen;
 
     public Notebook(String name,
                     double discount,
@@ -16,12 +18,14 @@ public class Notebook extends Product {
                     double price,
                     Brand brand,
                     Ram ram,
-                    Screen screenSize,
+                    Screen screen,
                     Storage hdd,
                     Storage ssd) {
-        super(IdGenerator.generate(++counter, Notebook.class), name, discount, stock, price, brand, ram, screenSize);
+        super(IdGenerator.generate(++counter, Notebook.class), name, discount, stock, price, brand);
         this.hdd = hdd;
         this.ssd = ssd;
+        this.ram = ram;
+        this.screen = screen;
     }
 
     public Storage getHdd() {
@@ -30,6 +34,13 @@ public class Notebook extends Product {
 
     public Storage getSsd() {
         return ssd;
+    }
+
+    public Ram getRam() {
+        return ram;
+    }
+    public Screen getScreen() {
+        return screen;
     }
 
     @Override
@@ -41,8 +52,8 @@ public class Notebook extends Product {
                 ", stock = " + super.getStock() +
                 ", price = " + super.getPrice() +
                 ", brand = " + super.getBrand().getName() +
-                ", ram = " + super.getRam().toString() +
-                ", screenSize = " + super.getScreenSize().toString() +
+                ", ram = " + ram.toString() +
+                ", screenSize = " + screen.toString() +
                 ", hdd = " + hdd +
                 ", ssd = " + ssd +
                 '}';

@@ -1,8 +1,5 @@
 package entity;
 
-import enums.Ram;
-import enums.Screen;
-
 public abstract class Product {
     private final String id;
     private final String name;
@@ -10,25 +7,21 @@ public abstract class Product {
     private int stock;
     private double price;
     private final Brand brand;
-    private final Ram ram;
-    private final Screen screenSize;
+
 
     public Product(String id,
                    String name,
                    double discount,
                    int stock,
                    double price,
-                   Brand brand,
-                   Ram ram,
-                   Screen screenSize) {
+                   Brand brand
+    ) {
         this.id = id;
         this.name = name;
         this.discount = discount;
         this.stock = stock;
         this.price = price;
         this.brand = brand;
-        this.ram = ram;
-        this.screenSize = screenSize;
     }
 
     public String getId() {
@@ -63,13 +56,6 @@ public abstract class Product {
         return brand;
     }
 
-    public Ram getRam() {
-        return ram;
-    }
-
-    public Screen getScreenSize() {
-        return screenSize;
-    }
 
     @Override
     public String toString() {
@@ -80,8 +66,6 @@ public abstract class Product {
                 ", stock = " + stock +
                 ", price = " + price +
                 ", brand = " + brand.getName() +
-                ", ram = " + ram +
-                ", screenSize = " + screenSize +
                 '}';
     }
 }

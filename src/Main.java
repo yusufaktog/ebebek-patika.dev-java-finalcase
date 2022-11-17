@@ -6,8 +6,8 @@ import exception.EntityNotFoundException;
 import service.BrandService;
 import service.ProductService;
 
-import java.util.*;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Scanner;
 
 import static enums.EnumHandler.convertToEnumType;
 
@@ -176,6 +176,46 @@ public class Main {
         return false;
     }
 
+    public void loadTestData() {
+        // load some notebooks to test
+        productService.createProduct(new Notebook("Abra A5 V11.1", 10.0, 250, 13_500.0,
+                brandService.getBrandById("B0000000009"), Ram.GB8, Screen.PC_SMALL, Storage.TB1, Storage.GB256));
+
+        productService.createProduct(new Notebook("Tulpar T7 V20.5", 10.0, 100, 29_999.0,
+                brandService.getBrandById("B0000000009"), Ram.GB16, Screen.PC_LARGE, Storage.TB2, Storage.GB512));
+
+        productService.createProduct(new Notebook("Asus X415ma Celeron", 0.0, 500, 5_799,
+                brandService.getBrandById("B0000000006"), Ram.GB4, Screen.PC_SMALL, Storage.NONE, Storage.GB128));
+
+        productService.createProduct(new Notebook("Asus X515ea", 5, 150, 14_299.0,
+                brandService.getBrandById("B0000000006"), Ram.GB8, Screen.PC_MEDIUM, Storage.NONE, Storage.GB512));
+
+        productService.createProduct(new Notebook("MacBook M1 Pro ", 10.0, 1000, 41_999,
+                brandService.getBrandById("B0000000005"), Ram.GB16, Screen.PC_SMALL, Storage.NONE, Storage.GB512));
+
+        // load some phones
+
+        productService.createProduct(new Phone("Redmi Note 11 Pro", 0, 500, 3500.0,
+                brandService.getBrandById("B0000000008"), Ram.GB4, Screen.PHONE_MEDIUM,
+                Color.GRAY, 5000, Storage.GB128));
+
+        productService.createProduct(new Phone("12T Pro", 5, 250, 23_759,
+                brandService.getBrandById("B0000000008"), Ram.GB16, Screen.PHONE_LARGE,
+                Color.BLACK, 6000, Storage.GB256));
+
+        productService.createProduct(new Phone("Galaxy M33", 10, 250, 6_999,
+                brandService.getBrandById("B0000000001"), Ram.GB6, Screen.PHONE_MEDIUM,
+                Color.BLUE, 4000, Storage.GB128));
+
+        productService.createProduct(new Phone("P20 Lite", 8, 300, 3_899,
+                brandService.getBrandById("B0000000004"), Ram.GB4, Screen.PHONE_MEDIUM,
+                Color.YELLOW, 3500, Storage.GB256));
+
+        productService.createProduct(new Phone("IPhone 14 Pro Max", 5, 50, 51_847,
+                brandService.getBrandById("B0000000003"), Ram.GB4, Screen.PHONE_LARGE,
+                Color.BLACK, 7500, Storage.GB512));
+    }
+
     public static void main(String[] args) {
         Main main = new Main(new BrandService(), new ProductService());
 
@@ -190,39 +230,9 @@ public class Main {
         main.brandService.addBrand(new Brand("Xiaomi"));
         main.brandService.addBrand(new Brand("Monster"));
 
-        main.productService.createProduct(new Notebook("Abra A5", 10.0, 1000, 14500.0,
-                main.brandService.getBrandById("B0000000009"), Ram.GB8, Screen.
-                PC_MEDIUM, Storage.TB1, Storage.GB256));
-        main.productService.createProduct(new Notebook("Tulpar A5", 10.0, 1000, 14500.0,
-                main.brandService.getBrandById("B0000000009"), Ram.GB8, Screen.
-                PC_MEDIUM, Storage.TB1, Storage.GB256));
-        main.productService.createProduct(new Notebook("Xsbith A5", 10.0, 1000, 14500.0,
-                main.brandService.getBrandById("B0000000006"), Ram.GB8, Screen.
-                PC_MEDIUM, Storage.TB1, Storage.GB256));
-        main.productService.createProduct(new Notebook("Excalibur A5", 10.0, 1000, 14500.0,
-                main.brandService.getBrandById("B0000000005"), Ram.GB8, Screen.
-                PC_MEDIUM, Storage.TB1, Storage.GB256));
-        main.productService.createProduct(new Notebook("Celeron A5", 10.0, 1000, 14500.0,
-                main.brandService.getBrandById("B0000000005"), Ram.GB8, Screen.
-                PC_MEDIUM, Storage.TB1, Storage.GB256));
-        main.productService.createProduct(new Phone("Note 8", 10, 250, 3500.0,
-                main.brandService.getBrandById("B0000000008"), Ram.GB4, Screen.PHONE_MEDIUM,
-                Color.BLACK, 4000, Storage.GB256));
-        main.productService.createProduct(new Phone("Note 10 Pro", 10, 250, 3500.0,
-                main.brandService.getBrandById("B0000000008"), Ram.GB4, Screen.PHONE_MEDIUM,
-                Color.GREEN, 4000, Storage.GB256));
-        main.productService.createProduct(new Phone("Note 10", 10, 250, 3500.0,
-                main.brandService.getBrandById("B0000000001"), Ram.GB4, Screen.PHONE_MEDIUM,
-                Color.BLUE, 4000, Storage.GB256));
-        main.productService.createProduct(new Phone("Note 21", 10, 250, 3500.0,
-                main.brandService.getBrandById("B0000000002"), Ram.GB4, Screen.PHONE_MEDIUM,
-                Color.YELLOW, 4000, Storage.GB256));
-        main.productService.createProduct(new Phone("Note 2", 10, 250, 3500.0,
-                main.brandService.getBrandById("B0000000004"), Ram.GB4, Screen.PHONE_MEDIUM,
-                Color.YELLOW, 4000, Storage.GB256));
-        main.productService.createProduct(new Phone("Note 1", 10, 250, 3500.0,
-                main.brandService.getBrandById("B0000000003"), Ram.GB4, Screen.PHONE_MEDIUM,
-                Color.YELLOW, 4000, Storage.GB256));
+        // load some test data
+        main.loadTestData();
+
         while (true) {
             System.out.println("---------");
             System.out.println("MAIN MENU");
@@ -277,9 +287,9 @@ public class Main {
 
                 default:
                     System.out.println("Invalid Option");
+
                     break;
             }
         }
-
     }
 }

@@ -5,7 +5,6 @@ import enums.Category;
 
 import java.util.List;
 
-
 public interface Service {
     Object getProductById(String productId);
 

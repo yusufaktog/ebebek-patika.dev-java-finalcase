@@ -12,6 +12,9 @@ public class Phone extends Product {
     private final int battery;
     private final Storage storage;
 
+    private final Ram ram;
+    private final Screen screenSize;
+
     public Phone(String name,
                  double discount,
                  int stock,
@@ -19,15 +22,25 @@ public class Phone extends Product {
                  Brand brand,
                  Ram ram,
                  Screen screenSize,
-                 enums.Color color,
+                 Color color,
                  int battery,
                  Storage storage
     ) {
 
-        super(IdGenerator.generate(++counter, Phone.class), name, discount, stock, price, brand, ram, screenSize);
+        super(IdGenerator.generate(++counter, Phone.class), name, discount, stock, price, brand);
         this.color = color;
         this.battery = battery;
         this.storage = storage;
+        this.ram = ram;
+        this.screenSize = screenSize;
+    }
+
+    public Ram getRam() {
+        return ram;
+    }
+
+    public Screen getScreenSize() {
+        return screenSize;
     }
 
     public Color getColor() {
@@ -51,8 +64,8 @@ public class Phone extends Product {
                 ", stock = " + super.getStock() +
                 ", price = " + super.getPrice() +
                 ", brand = " + super.getBrand().getName() +
-                ", ram = " + super.getRam().toString() +
-                ", screenSize = " + super.getScreenSize().toString() +
+                ", ram = " + ram.toString() +
+                ", screenSize = " + screenSize.toString() +
                 ", color = " + color +
                 ", battery = " + battery +
                 ", storage = " + storage +
