@@ -176,7 +176,7 @@ public class Main {
         return false;
     }
 
-    public void loadTestData() {
+    public void loadTestData() throws EntityNotFoundException {
         // load some notebooks to test
         productService.createProduct(new Notebook("Abra A5 V11.1", 10.0, 250, 13_500.0,
                 brandService.getBrandById("B0000000009"), Ram.GB8, Screen.PC_SMALL, Storage.TB1, Storage.GB256));
@@ -231,8 +231,12 @@ public class Main {
         main.brandService.addBrand(new Brand("Monster"));
 
         // load some test data
-        main.loadTestData();
+        try {
+            main.loadTestData();
 
+        } catch (EntityNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
         while (true) {
             System.out.println("---------");
             System.out.println("MAIN MENU");

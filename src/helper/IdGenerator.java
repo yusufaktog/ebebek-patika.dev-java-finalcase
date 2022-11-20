@@ -3,7 +3,7 @@ package helper;
 public class IdGenerator {
 
     // length: 3, Class: Phone =>  For 5th phone -> id = 'P005'
-    private static int length = 3;
+    private static int length = 10;
 
     public static String generate(int number, Class<?> classToGenerateId) {
 
